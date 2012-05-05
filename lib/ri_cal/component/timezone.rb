@@ -54,11 +54,13 @@ module RiCal
               elsif candidate_standard.ambiguous_local?(local)
                 [candidate_daylight, candidate_standard]
               else
-                [candidate_standard].compact
+                [candidate_standard]
               end
             else
-              [candidate_standard].compact
+              [candidate_standard]
             end
+          elsif candidate_daylight
+            [candidate_daylight]
           end
         end
 
@@ -179,7 +181,8 @@ module RiCal
       def last_before_utc(period_array, time) #:nodoc:
         candidates = period_array.map {|period|
           period.last_before_utc(time)
-        }
+        }.compact
+        
         result = candidates.max {|a, b| a.dtstart_property <=> b.dtstart_property}
         result
       end
@@ -187,7 +190,8 @@ module RiCal
       def last_before_local(period_array, time) #:nodoc:
         candidates = period_array.map {|period|
           period.last_before_local(time)
-        }
+        }.compact
+        
         result = candidates.max {|a, b| a.dtstart_property <=> b.dtstart_property}
         result
       end
